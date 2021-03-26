@@ -3,6 +3,7 @@ import 'package:daily_tracker/createXL.dart';
 import 'package:daily_tracker/date_picker.dart';
 import 'package:daily_tracker/editable_cell.dart';
 import 'package:daily_tracker/gestureState.dart';
+import 'package:daily_tracker/project_list.dart';
 import 'package:daily_tracker/row_cell.dart';
 import 'package:daily_tracker/sideBar.dart';
 import 'package:flutter/material.dart';
@@ -18,8 +19,14 @@ void main() {
 class DailyTracker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<GestureState>(
-      create: (context) => GestureState(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<GestureState>(
+            create: (context) => GestureState()),
+        ChangeNotifierProvider<ProjectList>(
+          create: (context) => ProjectList(),
+        )
+      ],
       child: MaterialApp(
           title: 'Daily Tracker',
           theme: ThemeData(

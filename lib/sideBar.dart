@@ -1,5 +1,5 @@
 import 'package:daily_tracker/gestureState.dart';
-import 'package:daily_tracker/projects.dart';
+import 'package:daily_tracker/project_listview.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -21,21 +21,21 @@ class SideBar extends StatelessWidget {
                   gestureState.updateSwipe();
                   Navigator.of(context)
                       .push(MaterialPageRoute(builder: (context) {
-                    return Projects();
+                    return ProjectListView();
                   }));
                 },
               ),
-              GestureDetector(
+              /*GestureDetector(
                 child: Icon(Icons.update),
                 onTap: () {
                   print("This is home icon");
                   gestureState.updateSwipe();
                   Navigator.of(context)
                       .push(MaterialPageRoute(builder: (context) {
-                    return Projects();
+                    return ProjectListView();
                   }));
                 },
-              )
+              ) */
             ],
           ),
         ),
