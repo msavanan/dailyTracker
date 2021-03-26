@@ -1,4 +1,4 @@
-# daily_tracker
+# Daily tracker
 
 A demo project for Daily Tracker
 
