@@ -13,11 +13,16 @@ class RowCell extends StatelessWidget {
         ),
         Expanded(
           flex: 4,
-          child: TextField(),
+          child: Container(
+              decoration:
+                  BoxDecoration(border: Border.all(color: Colors.black)),
+              child: TextField()),
         ),
         Expanded(
-          child: TextField(),
-        )
+            child: Container(
+                decoration:
+                    BoxDecoration(border: Border.all(color: Colors.black)),
+                child: TextField()))
       ],
     );
   }

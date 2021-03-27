@@ -104,7 +104,6 @@ class _TrackerSheetState extends State<TrackerSheet> {
 
   @override
   Widget build(BuildContext context) {
-    //bool swipeMode = Provider.of<GestureState>(context).swipeRight;
     return Consumer<GestureState>(
       builder: (context, gestureState, child) => GestureDetector(
         onPanUpdate: (panValue) {
@@ -120,150 +119,165 @@ class _TrackerSheetState extends State<TrackerSheet> {
         child: Stack(
           children: [
             Scaffold(
+              //resizeToAvoidBottomInset: false, //new line
               //appBar: AppBar(),
-              body: SafeArea(
-                child: Padding(
-                  padding: EdgeInsets.all(10),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Container(
-                        color: Colors.blueAccent,
-                        child: Center(
-                            child:
-                                Text("Daily Updating Tracker - M Saravanan")),
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Cell(
-                              txt: 'Date',
-                            ),
-                          ),
-                          Expanded(
-                            flex: 5,
-                            child: DatePicker(),
-                          )
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Cell(
-                              txt: 'Project',
-                            ),
-                          ),
-                          Expanded(
-                            flex: 5,
-                            child: GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    project = true;
-                                  });
-                                },
-                                child: EditableCell(
-                                  editable: project,
-                                )),
-                          )
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Cell(
-                              txt: 'Update',
-                            ),
-                          ),
-                          Expanded(
-                            flex: 5,
-                            child: GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    update = true;
-                                  });
-                                },
-                                child: EditableCell(
-                                  editable: update,
-                                )),
-                          )
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Cell(
-                              txt: 'SL No',
-                            ),
-                          ),
-                          Expanded(
-                            flex: 4,
-                            child: Center(
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  GestureDetector(
-                                    child: Icon(Icons.add),
-                                    onTap: () {
-                                      print('Add row');
-                                    },
-                                  ),
-                                  Cell(
-                                    txt: 'Issue',
-                                  ),
-                                  GestureDetector(
-                                    child: Icon(Icons.remove),
-                                    onTap: () {
-                                      print('Delete row');
-                                    },
-                                  ),
-                                ],
+              body: SingleChildScrollView(
+                child: SafeArea(
+                  child: Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          color: Colors.blueAccent,
+                          child: Center(
+                              child:
+                                  Text("Daily Updating Tracker - M Saravanan")),
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Cell(
+                                txt: 'Date',
                               ),
                             ),
-                          ),
-                          Expanded(
-                            child: Cell(
-                              txt: 'Status',
+                            Expanded(
+                              flex: 5,
+                              child: DatePicker(),
+                            )
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Cell(
+                                txt: 'Project',
+                              ),
                             ),
-                          )
-                        ],
-                      ),
-                      RowCell(),
-                      RowCell(),
-                      RowCell(),
-                      RowCell(),
-                      Cell(txt: 'Project For Next Working Day'),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Cell(
-                              txt: 'Project',
+                            Expanded(
+                              flex: 5,
+                              child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      project = true;
+                                    });
+                                  },
+                                  child: EditableCell(
+                                    editable: project,
+                                  )),
+                            )
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Cell(
+                                txt: 'Update',
+                              ),
                             ),
-                          ),
-                          Expanded(
-                            flex: 5,
-                            child: Cell(
-                              txt: '',
+                            Expanded(
+                              flex: 5,
+                              child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      update = true;
+                                    });
+                                  },
+                                  child: EditableCell(
+                                    editable: update,
+                                  )),
+                            )
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Cell(
+                                txt: 'SL No',
+                              ),
                             ),
-                          )
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Cell(
-                              txt: 'Update',
+                            Expanded(
+                              flex: 4,
+                              child: Center(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    GestureDetector(
+                                      child: Icon(Icons.add),
+                                      onTap: () {
+                                        print('Add row');
+                                      },
+                                    ),
+                                    Cell(
+                                      txt: 'Issue',
+                                    ),
+                                    GestureDetector(
+                                      child: Icon(Icons.remove),
+                                      onTap: () {
+                                        print('Delete row');
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
-                          ),
-                          Expanded(
-                            flex: 5,
-                            child: Cell(
-                              txt: '',
+                            Expanded(
+                              child: Cell(
+                                txt: 'Status',
+                              ),
+                            )
+                          ],
+                        ),
+                        RowCell(),
+                        RowCell(),
+                        RowCell(),
+                        RowCell(),
+                        Cell(txt: 'Project For Next Working Day'),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Cell(
+                                txt: 'Project',
+                              ),
                             ),
-                          )
-                        ],
-                      ),
-                    ],
+                            Expanded(
+                              flex: 5,
+                              child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      update = true;
+                                    });
+                                  },
+                                  child: EditableCell(
+                                    editable: update,
+                                  )), //Cell(txt: '', ),
+                            )
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Cell(
+                                txt: 'Update',
+                              ),
+                            ),
+                            Expanded(
+                              flex: 5,
+                              child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      update = true;
+                                    });
+                                  },
+                                  child: EditableCell(
+                                    editable: update,
+                                  )),
+                            ), //Cell(txt: '', ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

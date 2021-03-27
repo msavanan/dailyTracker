@@ -7,7 +7,9 @@ class EditableCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return editable
-        ? TextField()
+        ? Container(
+            decoration: BoxDecoration(border: Border.all(color: Colors.black)),
+            child: TextField())
         : Cell(
             txt: '',
           );
