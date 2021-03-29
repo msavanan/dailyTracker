@@ -1,3 +1,4 @@
+import 'package:daily_tracker/database/db_daily_tracker.dart';
 import 'package:daily_tracker/project/project_list.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -34,12 +35,24 @@ class _ProjectWidgetState extends State<ProjectWidget> {
                   "")
               : TextField(
                   //maxLines: 2 ,
-                  onSubmitted: (value) {
+                  onSubmitted: (value) async {
                     Provider.of<ProjectList>(context, listen: false)
                         .add(number: widget.projectNumber - 1, title: value);
-                    print(Provider.of<ProjectList>(context, listen: false)
-                        .projectList[widget.projectNumber - 1]
-                        .title);
+                    String title =
+                        Provider.of<ProjectList>(context, listen: false)
+                            .projectList[widget.projectNumber - 1]
+                            .title;
+                    print(title);
+
+                    //Database
+                    DailyTrackerDatabase.instance.insert('project', {
+                      'projectNum': widget.projectNumber,
+                      'projectName': title
+                    });
+                    var tb =
+                        await DailyTrackerDatabase.instance.select('project');
+                    print('Project_widget line 54');
+                    print('$tb');
                   },
                   onEditingComplete: () {
                     print("onEditing Complete");

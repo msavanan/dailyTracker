@@ -1,14 +1,14 @@
 import 'package:daily_tracker/cell.dart';
-import 'package:daily_tracker/createXL.dart';
+//import 'package:daily_tracker/createXL.dart';
 import 'package:daily_tracker/date_picker.dart';
 import 'package:daily_tracker/editable_cell.dart';
 import 'package:daily_tracker/gestureState.dart';
 import 'package:daily_tracker/project/project_list.dart';
+import 'package:daily_tracker/project/project_tracker.dart';
 import 'package:daily_tracker/row_cell.dart';
 import 'package:daily_tracker/sideBar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'createXL.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,7 +26,9 @@ class DailyTracker extends StatelessWidget {
             create: (context) => GestureState()),
         ChangeNotifierProvider<ProjectList>(
           create: (context) => ProjectList(),
-        )
+        ),
+        ChangeNotifierProvider<ProjectTracker>(
+            create: (context) => ProjectTracker()),
       ],
       child: MaterialApp(
           title: 'Daily Tracker',
@@ -103,7 +105,7 @@ class _TrackerSheetState extends State<TrackerSheet> {
 
   @override
   Widget build(BuildContext context) {
-    createXL();
+    //createXL();
     return Consumer<GestureState>(
       builder: (context, gestureState, child) => GestureDetector(
         onPanUpdate: (panValue) {
@@ -167,6 +169,11 @@ class _TrackerSheetState extends State<TrackerSheet> {
                                   },
                                   child: EditableCell(
                                     editable: project,
+                                    onChanged: (value) {
+                                      Provider.of<ProjectTracker>(context,
+                                              listen: false)
+                                          .cProjectTitle = value;
+                                    },
                                   )),
                             )
                           ],
@@ -188,6 +195,11 @@ class _TrackerSheetState extends State<TrackerSheet> {
                                   },
                                   child: EditableCell(
                                     editable: update,
+                                    onChanged: (value) {
+                                      Provider.of<ProjectTracker>(context,
+                                              listen: false)
+                                          .cProjectUpdate = value;
+                                    },
                                   )),
                             )
                           ],
@@ -235,9 +247,9 @@ class _TrackerSheetState extends State<TrackerSheet> {
                           ],
                         ),
                         RowCell(),
+                        /*RowCell(),
                         RowCell(),
-                        RowCell(),
-                        RowCell(),
+                        RowCell(),*/
                         Cell(txt: 'Project For Next Working Day'),
                         Row(
                           children: [
@@ -249,14 +261,21 @@ class _TrackerSheetState extends State<TrackerSheet> {
                             Expanded(
                               flex: 5,
                               child: GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      update = true;
-                                    });
+                                onTap: () {
+                                  setState(() {
+                                    update = true;
+                                  });
+                                },
+                                child: EditableCell(
+                                  editable: update,
+                                  onChanged: (value) {
+                                    Provider.of<ProjectTracker>(context,
+                                            listen: false)
+                                        .nProjectTitle = value;
                                   },
-                                  child: EditableCell(
-                                    editable: update,
-                                  )), //Cell(txt: '', ),
+                                ),
+                              ),
+                              //Cell(txt: '', ),
                             )
                           ],
                         ),
@@ -277,10 +296,43 @@ class _TrackerSheetState extends State<TrackerSheet> {
                                   },
                                   child: EditableCell(
                                     editable: update,
+                                    onChanged: (value) {
+                                      Provider.of<ProjectTracker>(context,
+                                              listen: false)
+                                          .nProjectUpdate = value;
+                                    },
                                   )),
                             ), //Cell(txt: '', ),
                           ],
                         ),
+                        ElevatedButton(
+                            onPressed: () {
+                              String date = Provider.of<ProjectTracker>(context,
+                                      listen: false)
+                                  .date;
+                              String cprojectTitle =
+                                  Provider.of<ProjectTracker>(context,
+                                          listen: false)
+                                      .cProjectTitle;
+                              String cprojectUpdate =
+                                  Provider.of<ProjectTracker>(context,
+                                          listen: false)
+                                      .cProjectUpdate;
+                              String nprojectTitle =
+                                  Provider.of<ProjectTracker>(context,
+                                          listen: false)
+                                      .nProjectTitle;
+                              String nprojectUpdate =
+                                  Provider.of<ProjectTracker>(context,
+                                          listen: false)
+                                      .nProjectUpdate;
+                              print(date);
+                              print(cprojectTitle);
+                              print(cprojectUpdate);
+                              print(nprojectTitle);
+                              print(nprojectUpdate);
+                            },
+                            child: Text('Submit'))
                       ],
                     ),
                   ),

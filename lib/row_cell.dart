@@ -12,6 +12,7 @@ class RowCell extends StatelessWidget {
                   BoxDecoration(border: Border.all(color: Colors.black)),
               child: TextField(
                 textAlign: TextAlign.center,
+                onChanged: (value) {},
               )),
         ),
         Expanded(
@@ -19,7 +20,9 @@ class RowCell extends StatelessWidget {
           child: Container(
               decoration:
                   BoxDecoration(border: Border.all(color: Colors.black)),
-              child: TextField()),
+              child: TextField(
+                onChanged: (value) {},
+              )),
         ),
         Expanded(
             child: Container(
@@ -27,6 +30,7 @@ class RowCell extends StatelessWidget {
                     BoxDecoration(border: Border.all(color: Colors.black)),
                 child: TextField(
                   textAlign: TextAlign.center,
+                  onChanged: (value) {},
                 )))
       ],
     );

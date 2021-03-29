@@ -1,6 +1,8 @@
 import 'package:daily_tracker/cell.dart';
+import 'package:daily_tracker/project/project_tracker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 DateTime _fromDate = DateTime.now();
 TimeOfDay _fromTime = TimeOfDay.fromDateTime(DateTime.now());
@@ -52,6 +54,9 @@ class _DatePickerState extends State<DatePicker> {
       setState(() {
         _fromDate = picked;
       });
+      //Project Tracker class
+      Provider.of<ProjectTracker>(context, listen: false).date =
+          '${DateFormat.yMMMd().format(_fromDate)}';
     }
   }
 

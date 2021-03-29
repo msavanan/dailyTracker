@@ -7,6 +7,12 @@ import 'package:sqflite/sqflite.dart';
 class DailyTrackerDatabase {
   static final _dbName = 'dailyTracker.db';
   static final _dbVersion = 1;
+  static final tableName = {
+    "project": "project",
+    "currentProject": "currentProject",
+    "projection": "projection",
+    "issue": "issue",
+  };
 
   DailyTrackerDatabase._databaseConstructor();
 
@@ -31,7 +37,20 @@ class DailyTrackerDatabase {
 
   Future _onCreate(Database db, int version) {
     return db.execute('''
-          CREATE TABLE project(projectNum INTEGER, projectName TEXT)
+          CREATE TABLE $tableName["project"](projectNum INTEGER, projectName TEXT)
+          CREATE TABLE $tableName["currentProject"](date TEXT PRIMARY KEY, projectTitle TEXT, projectUpdate TEXT)
+          CREATE TABLE $tableName["projection"](date TEXT PRIMARY KEY, projectTitle TEXT, projectUpdate TEXT)
+          CREATE TABLE $tableName["issue"](date TEXT PRIMARY KEY, slno INTEGER, issue TEXT, status TEXT)
       ''');
+  }
+
+  Future insert(String table, Map<String, dynamic> row) async {
+    Database db = await instance.database;
+    return db.insert(table, row);
+  }
+
+  Future<List<Map<String, dynamic>>> select(String table) async {
+    Database db = await instance.database;
+    return db.query(table);
   }
 }
