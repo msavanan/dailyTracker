@@ -3,7 +3,7 @@ import 'package:daily_tracker/createXL.dart';
 import 'package:daily_tracker/date_picker.dart';
 import 'package:daily_tracker/editable_cell.dart';
 import 'package:daily_tracker/gestureState.dart';
-import 'package:daily_tracker/project_list.dart';
+import 'package:daily_tracker/project/project_list.dart';
 import 'package:daily_tracker/row_cell.dart';
 import 'package:daily_tracker/sideBar.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +12,8 @@ import 'createXL.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  createXL();
+
+  //runApp(MyApp());
   runApp(DailyTracker());
 }
 
@@ -29,9 +30,7 @@ class DailyTracker extends StatelessWidget {
       ],
       child: MaterialApp(
           title: 'Daily Tracker',
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-          ),
+          //theme: ThemeData(primarySwatch: Colors.blue,),
           home: TrackerSheet()), //MyHomePage(title: 'Daily Tracker'),
     );
   }
@@ -104,6 +103,7 @@ class _TrackerSheetState extends State<TrackerSheet> {
 
   @override
   Widget build(BuildContext context) {
+    createXL();
     return Consumer<GestureState>(
       builder: (context, gestureState, child) => GestureDetector(
         onPanUpdate: (panValue) {
@@ -124,12 +124,15 @@ class _TrackerSheetState extends State<TrackerSheet> {
               body: SingleChildScrollView(
                 child: SafeArea(
                   child: Padding(
-                    padding: EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(8.0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Container(
-                          color: Colors.blueAccent,
+                          //color: Colors.blueAccent,
+                          height: 35,
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black)),
                           child: Center(
                               child:
                                   Text("Daily Updating Tracker - M Saravanan")),
@@ -203,21 +206,23 @@ class _TrackerSheetState extends State<TrackerSheet> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
                                   children: [
-                                    GestureDetector(
+                                    /*GestureDetector(
                                       child: Icon(Icons.add),
                                       onTap: () {
                                         print('Add row');
                                       },
+                                    ),*/
+                                    Expanded(
+                                      child: Cell(
+                                        txt: 'Issue',
+                                      ),
                                     ),
-                                    Cell(
-                                      txt: 'Issue',
-                                    ),
-                                    GestureDetector(
+                                    /*GestureDetector(
                                       child: Icon(Icons.remove),
                                       onTap: () {
                                         print('Delete row');
                                       },
-                                    ),
+                                    ),*/
                                   ],
                                 ),
                               ),

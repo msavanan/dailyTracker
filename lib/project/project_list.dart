@@ -1,4 +1,4 @@
-import 'package:daily_tracker/project.dart';
+import 'package:daily_tracker/project/project.dart';
 import 'package:flutter/material.dart';
 
 class ProjectList extends ChangeNotifier {

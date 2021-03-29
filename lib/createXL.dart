@@ -6,18 +6,91 @@ import 'dart:typed_data';
 
 import 'dart:async';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:permission_handler/permission_handler.dart';
 
 var bytes;
 String assetsPath = "assets/form.xlsx";
-String dir;
+Directory dir;
 
 Future loadAsset() async {
-  dir = (await getApplicationDocumentsDirectory()).path;
+  var status = await Permission.storage.status;
+  if (status.isDenied || status.isPermanentlyDenied) {
+    Map<Permission, PermissionStatus> statuses = await [
+      Permission.storage,
+    ].request();
+    print(statuses[
+        Permission.storage]); // it should print PermissionStatus.granted
+  }
+  dir = await getExternalStorageDirectory();
   ByteData data = await rootBundle.load(assetsPath);
 // This would be your equivalent bytes variable
   List<int> bytes =
       data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
   return bytes;
+}
+
+/*class CounterStorage {
+  Future<String> get _localPath async {
+    final directory = await getApplicationDocumentsDirectory();
+
+    return directory.path;
+  }
+
+  Future<File> get _localFile async {
+    final path = await _localPath;
+    return File('$path/counter.txt');
+  }
+
+  Future<int> readCounter() async {
+    try {
+      final file = await _localFile;
+
+      // Read the file
+      String contents = await file.readAsString();
+
+      return int.parse(contents);
+    } catch (e) {
+      // If encountering an error, return 0
+      return 0;
+    }
+  }
+
+  Future<File> writeCounter(int counter) async {
+    final file = await _localFile;
+
+    // Write the file
+    return file.writeAsString('$counter');
+  }
+}*/
+
+void createExcelFile() async {
+  ByteData data = await rootBundle.load("assets/form.xlsx");
+// This would be your equivalent bytes variable
+  List<int> bytes =
+      data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+
+// You can also copy it to the device when the app starts
+  final directory = await getApplicationDocumentsDirectory();
+  String filePath = join(directory.path, "form.xlsx");
+  print(filePath);
+  await File(filePath).writeAsBytes(bytes);
+//  saveFile();
+//  readFile();
+}
+
+Future<String> getFilePath() async {
+  Directory appDocumentsDirectory =
+      await getApplicationDocumentsDirectory(); // 1
+  String appDocumentsPath = appDocumentsDirectory.path; // 2
+  String filePath = '$appDocumentsPath/demoTextFile.txt'; // 3
+  print(filePath);
+  return filePath;
+}
+
+void saveFile() async {
+  File file = File(await getFilePath()); // 1
+  file.writeAsString(
+      "This is my demo text that will be saved to : demoTextFile.txt"); // 2
 }
 
 void createXL() {
@@ -30,8 +103,15 @@ void createXL() {
   //var excel = Excel.createExcel();
   // or
   loadAsset().then((value) {
-    bytes = value;
-    var excel = Excel.decodeBytes(bytes);
+    print('${dir.path}');
+
+    var file = "${dir.path}/form.xlsx";
+    var bytes = File(file).readAsBytesSync();
+    var excel = Excel.createExcel();
+
+    //bytes = value;
+
+    //var excel = Excel.decodeBytes(bytes);
     //print(bytes);
     // print('-------------bytes----------');
     for (var table in excel.tables.keys) {
@@ -116,10 +196,11 @@ void createXL() {
 
     //String outputFile = "assets/form.xlsx";
     excel.encode().then((onValue) {
-      File(join('$dir/form.xlsx'))
+      File(join('${dir.path}/form.xlsx'))
         ..createSync(recursive: true)
         ..writeAsBytesSync(onValue);
     });
+    print('${dir.path}');
     print('Complete');
   });
 }

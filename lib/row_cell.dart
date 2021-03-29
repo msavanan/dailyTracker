@@ -7,9 +7,12 @@ class RowCell extends StatelessWidget {
     return Row(
       children: [
         Expanded(
-          child: Cell(
-            txt: '',
-          ),
+          child: Container(
+              decoration:
+                  BoxDecoration(border: Border.all(color: Colors.black)),
+              child: TextField(
+                textAlign: TextAlign.center,
+              )),
         ),
         Expanded(
           flex: 4,
@@ -22,7 +25,9 @@ class RowCell extends StatelessWidget {
             child: Container(
                 decoration:
                     BoxDecoration(border: Border.all(color: Colors.black)),
-                child: TextField()))
+                child: TextField(
+                  textAlign: TextAlign.center,
+                )))
       ],
     );
   }
