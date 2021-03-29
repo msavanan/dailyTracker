@@ -8,6 +8,8 @@ class ProjectTracker extends ChangeNotifier {
   String nProjectTitle;
   String nProjectUpdate;
 
+  int currentIndex = 0;
+
   List<IssueTracker> issueTrackerList = [];
 }
 

@@ -326,9 +326,31 @@ class _TrackerSheetState extends State<TrackerSheet> {
                                   Provider.of<ProjectTracker>(context,
                                           listen: false)
                                       .nProjectUpdate;
+                              int index = Provider.of<ProjectTracker>(context,
+                                      listen: false)
+                                  .currentIndex;
                               print(date);
                               print(cprojectTitle);
                               print(cprojectUpdate);
+                              for (int i = 0; i <= index; i++) {
+                                int sno = Provider.of<ProjectTracker>(context,
+                                        listen: false)
+                                    .issueTrackerList[i]
+                                    .sno;
+                                String issue = Provider.of<ProjectTracker>(
+                                        context,
+                                        listen: false)
+                                    .issueTrackerList[i]
+                                    .issue;
+                                String status = Provider.of<ProjectTracker>(
+                                        context,
+                                        listen: false)
+                                    .issueTrackerList[i]
+                                    .status;
+                                print(sno);
+                                print(issue);
+                                print(status);
+                              }
                               print(nprojectTitle);
                               print(nprojectUpdate);
                             },
