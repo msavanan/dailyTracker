@@ -1,4 +1,4 @@
-import 'package:daily_tracker/cell.dart';
+import 'package:daily_tracker/xcel/cell.dart';
 import 'package:daily_tracker/project/project_tracker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

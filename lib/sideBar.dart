@@ -25,17 +25,6 @@ class SideBar extends StatelessWidget {
                   }));
                 },
               ),
-              /*GestureDetector(
-                child: Icon(Icons.update),
-                onTap: () {
-                  print("This is home icon");
-                  gestureState.updateSwipe();
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (context) {
-                    return ProjectListView();
-                  }));
-                },
-              ) */
             ],
           ),
         ),

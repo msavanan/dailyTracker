@@ -1,13 +1,16 @@
-import 'package:daily_tracker/cell.dart';
+import 'package:daily_tracker/database/db2Table.dart';
+import 'package:daily_tracker/database/table2db.dart';
+import 'package:daily_tracker/xcel/cell.dart';
 //import 'package:daily_tracker/createXL.dart';
-import 'package:daily_tracker/date_picker.dart';
-import 'package:daily_tracker/editable_cell.dart';
+import 'package:daily_tracker/xcel/date_picker.dart';
+import 'package:daily_tracker/xcel/editable_cell.dart';
 import 'package:daily_tracker/gestureState.dart';
 import 'package:daily_tracker/project/project_list.dart';
 import 'package:daily_tracker/project/project_tracker.dart';
-import 'package:daily_tracker/row_cell.dart';
+import 'package:daily_tracker/xcel/row_cell.dart';
 import 'package:daily_tracker/sideBar.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -29,6 +32,8 @@ class DailyTracker extends StatelessWidget {
         ),
         ChangeNotifierProvider<ProjectTracker>(
             create: (context) => ProjectTracker()),
+        ChangeNotifierProvider<DB2Table>(
+            create: (context) => DB2Table(currentTable: ProjectTracker())),
       ],
       child: MaterialApp(
           title: 'Daily Tracker',
@@ -37,62 +42,6 @@ class DailyTracker extends StatelessWidget {
     );
   }
 }
-/*
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text("Daily Updating Tracker_(Name)"),
-        ),
-        body: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text("Date: 18 MAR 2021"),
-                  ],
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [Text("Project"), TextField()],
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [Text("Update"), TextField()],
-                ),
-                TextButton(
-                    style: TextButton.styleFrom(
-                      backgroundColor: Colors.black,
-                    ),
-                    onPressed: () {},
-                    child: Text("Create Task")),
-              ],
-            ),
-          ),
-        ));
-  }
-}*/
 
 class TrackerSheet extends StatefulWidget {
   @override
@@ -106,6 +55,10 @@ class _TrackerSheetState extends State<TrackerSheet> {
   @override
   Widget build(BuildContext context) {
     //createXL();
+
+    Provider.of<DB2Table>(context, listen: true).checkCurrentDate(
+        context, '${DateFormat.yMMMd().format(DateTime.now())}');
+
     return Consumer<GestureState>(
       builder: (context, gestureState, child) => GestureDetector(
         onPanUpdate: (panValue) {
@@ -174,6 +127,10 @@ class _TrackerSheetState extends State<TrackerSheet> {
                                               listen: false)
                                           .cProjectTitle = value;
                                     },
+                                    initialText: Provider.of<DB2Table>(context,
+                                            listen: true)
+                                        .currentTable
+                                        .cProjectTitle,
                                   )),
                             )
                           ],
@@ -188,19 +145,24 @@ class _TrackerSheetState extends State<TrackerSheet> {
                             Expanded(
                               flex: 5,
                               child: GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      update = true;
-                                    });
+                                onTap: () {
+                                  setState(() {
+                                    update = true;
+                                  });
+                                },
+                                child: EditableCell(
+                                  editable: update,
+                                  onChanged: (value) {
+                                    Provider.of<ProjectTracker>(context,
+                                            listen: false)
+                                        .cProjectUpdate = value;
                                   },
-                                  child: EditableCell(
-                                    editable: update,
-                                    onChanged: (value) {
-                                      Provider.of<ProjectTracker>(context,
-                                              listen: false)
-                                          .cProjectUpdate = value;
-                                    },
-                                  )),
+                                  initialText: Provider.of<DB2Table>(context,
+                                          listen: false)
+                                      .currentTable
+                                      .cProjectUpdate,
+                                ),
+                              ),
                             )
                           ],
                         ),
@@ -273,6 +235,10 @@ class _TrackerSheetState extends State<TrackerSheet> {
                                             listen: false)
                                         .nProjectTitle = value;
                                   },
+                                  initialText: Provider.of<DB2Table>(context,
+                                          listen: false)
+                                      .currentTable
+                                      .nProjectTitle,
                                 ),
                               ),
                               //Cell(txt: '', ),
@@ -301,58 +267,17 @@ class _TrackerSheetState extends State<TrackerSheet> {
                                               listen: false)
                                           .nProjectUpdate = value;
                                     },
+                                    initialText: Provider.of<DB2Table>(context,
+                                            listen: false)
+                                        .currentTable
+                                        .nProjectUpdate,
                                   )),
                             ), //Cell(txt: '', ),
                           ],
                         ),
                         ElevatedButton(
                             onPressed: () {
-                              String date = Provider.of<ProjectTracker>(context,
-                                      listen: false)
-                                  .date;
-                              String cprojectTitle =
-                                  Provider.of<ProjectTracker>(context,
-                                          listen: false)
-                                      .cProjectTitle;
-                              String cprojectUpdate =
-                                  Provider.of<ProjectTracker>(context,
-                                          listen: false)
-                                      .cProjectUpdate;
-                              String nprojectTitle =
-                                  Provider.of<ProjectTracker>(context,
-                                          listen: false)
-                                      .nProjectTitle;
-                              String nprojectUpdate =
-                                  Provider.of<ProjectTracker>(context,
-                                          listen: false)
-                                      .nProjectUpdate;
-                              int index = Provider.of<ProjectTracker>(context,
-                                      listen: false)
-                                  .currentIndex;
-                              print(date);
-                              print(cprojectTitle);
-                              print(cprojectUpdate);
-                              for (int i = 0; i <= index; i++) {
-                                int sno = Provider.of<ProjectTracker>(context,
-                                        listen: false)
-                                    .issueTrackerList[i]
-                                    .sno;
-                                String issue = Provider.of<ProjectTracker>(
-                                        context,
-                                        listen: false)
-                                    .issueTrackerList[i]
-                                    .issue;
-                                String status = Provider.of<ProjectTracker>(
-                                        context,
-                                        listen: false)
-                                    .issueTrackerList[i]
-                                    .status;
-                                print(sno);
-                                print(issue);
-                                print(status);
-                              }
-                              print(nprojectTitle);
-                              print(nprojectUpdate);
+                              Table2db().updateDB(context);
                             },
                             child: Text('Submit'))
                       ],

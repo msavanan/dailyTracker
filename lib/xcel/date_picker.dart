@@ -1,4 +1,6 @@
-import 'package:daily_tracker/cell.dart';
+import 'package:daily_tracker/database/db2Table.dart';
+import 'package:daily_tracker/database/db_daily_tracker.dart';
+import 'package:daily_tracker/xcel/cell.dart';
 import 'package:daily_tracker/project/project_tracker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -50,13 +52,22 @@ class _DatePickerState extends State<DatePicker> {
       firstDate: DateTime(2015, 1),
       lastDate: DateTime(2100),
     );
-    if (picked != null && picked != _fromDate) {
+    if (picked != null /*&& picked != _fromDate*/) {
       setState(() {
         _fromDate = picked;
       });
       //Project Tracker class
-      Provider.of<ProjectTracker>(context, listen: false).date =
-          '${DateFormat.yMMMd().format(_fromDate)}';
+      String date = '${DateFormat.yMMMd().format(_fromDate)}';
+
+      Provider.of<ProjectTracker>(context, listen: false).date = date;
+      bool cond = await DailyTrackerDatabase.instance
+          .searchQuery("currentProject", date);
+      if (cond) {
+        Provider.of<DB2Table>(context, listen: false).checkCurrentDate(
+            context, '${DateFormat.yMMMd().format(DateTime.now())}');
+      } else {
+        Provider.of<DB2Table>(context, listen: false).setTable();
+      }
     }
   }
 
