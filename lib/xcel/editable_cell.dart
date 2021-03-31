@@ -15,10 +15,9 @@ class _EditableCellState extends State<EditableCell> {
   @override
   Widget build(BuildContext context) {
     TextEditingController editCellController = TextEditingController();
-    //editCellController.text =
-    TextEditingValue(text: widget.initialText);
-    print(
-        'Call from _EditableCellState number 20, widget.initialText : ${widget.initialText}');
+    editCellController.text = widget.initialText;
+    //TextEditingValue(text: widget.initialText);
+    //print('Call from _EditableCellState number 20, widget.initialText : ${widget.initialText}');
 
     return widget.editable
         ? Container(

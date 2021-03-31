@@ -63,8 +63,8 @@ class _DatePickerState extends State<DatePicker> {
       bool cond = await DailyTrackerDatabase.instance
           .searchQuery("currentProject", date);
       if (cond) {
-        await Provider.of<DB2Table>(context, listen: false).checkCurrentDate(
-            context, '${DateFormat.yMMMd().format(DateTime.now())}');
+        await Provider.of<DB2Table>(context, listen: false)
+            .checkCurrentDate(context, date);
       } else {
         Provider.of<DB2Table>(context, listen: false).setTable(context);
       }

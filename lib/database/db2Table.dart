@@ -2,6 +2,7 @@ import 'package:daily_tracker/project/project_tracker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import 'db_daily_tracker.dart';
 
@@ -14,7 +15,7 @@ class DB2Table extends ChangeNotifier {
         await DailyTrackerDatabase.instance.searchQuery("currentProject", date);
 
     if (cond) {
-      await updateTable(context);
+      await updateTable(context, date);
     } else {
       setTable(context);
     }
@@ -38,19 +39,24 @@ class DB2Table extends ChangeNotifier {
     notifyListeners();
   }
 
-  updateTable(BuildContext context) async {
+  updateTable(BuildContext context, date) async {
     print('Call from db2Table - updateTable function - line number 40');
-    var tb = await DailyTrackerDatabase.instance.select('currentProject');
-    var tb1 = await DailyTrackerDatabase.instance.select('projection');
-    var tb2 = await DailyTrackerDatabase.instance.select('issue');
-    /*print('db2table line 64');
+    var tb = await DailyTrackerDatabase.instance
+        .selectByDate('currentProject', date);
+    var tb1 =
+        await DailyTrackerDatabase.instance.selectByDate('projection', date);
+    var tb2 = await DailyTrackerDatabase.instance.selectByDate('issue', date);
+    print('db2table line 64');
     print('$tb');
     print('$tb1');
-    print('$tb2');*/
+    print('$tb2');
 
     currentTable.date = tb[0]['date'];
     currentTable.cProjectTitle = tb[0]['projectTitle'];
+    notifyListeners();
+
     currentTable.cProjectUpdate = tb[0]['projectUpdate'];
+    notifyListeners();
 
     currentTable.nProjectTitle = tb1[0]['projectTitle'];
     currentTable.nProjectUpdate = tb1[0]['projectUpdate'];
