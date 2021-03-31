@@ -53,11 +53,19 @@ class _TrackerSheetState extends State<TrackerSheet> {
   bool project = false;
 
   @override
+  void initState() {
+    super.initState();
+    initializeDate();
+  }
+
+  initializeDate() async {
+    await Provider.of<DB2Table>(context, listen: false).checkCurrentDate(
+        context, '${DateFormat.yMMMd().format(DateTime.now())}');
+  }
+
+  @override
   Widget build(BuildContext context) {
     //createXL();
-
-    Provider.of<DB2Table>(context, listen: true).checkCurrentDate(
-        context, '${DateFormat.yMMMd().format(DateTime.now())}');
 
     return Consumer<GestureState>(
       builder: (context, gestureState, child) => GestureDetector(
@@ -128,9 +136,10 @@ class _TrackerSheetState extends State<TrackerSheet> {
                                           .cProjectTitle = value;
                                     },
                                     initialText: Provider.of<DB2Table>(context,
-                                            listen: true)
-                                        .currentTable
-                                        .cProjectTitle,
+                                                listen: true)
+                                            .currentTable
+                                            .cProjectTitle ??
+                                        '',
                                   )),
                             )
                           ],
@@ -158,9 +167,10 @@ class _TrackerSheetState extends State<TrackerSheet> {
                                         .cProjectUpdate = value;
                                   },
                                   initialText: Provider.of<DB2Table>(context,
-                                          listen: false)
-                                      .currentTable
-                                      .cProjectUpdate,
+                                              listen: true)
+                                          .currentTable
+                                          .cProjectUpdate ??
+                                      '',
                                 ),
                               ),
                             )
@@ -208,7 +218,41 @@ class _TrackerSheetState extends State<TrackerSheet> {
                             )
                           ],
                         ),
-                        RowCell(),
+                        RowCell(
+                          snoText: Provider.of<DB2Table>(context, listen: true)
+                                      .currentTable
+                                      .issueTrackerList
+                                      .length !=
+                                  0
+                              ? Provider.of<DB2Table>(context, listen: true)
+                                  .currentTable
+                                  .issueTrackerList[0]
+                                  .sno
+                                  .toString()
+                              : '',
+                          issueText:
+                              Provider.of<DB2Table>(context, listen: true)
+                                          .currentTable
+                                          .issueTrackerList
+                                          .length !=
+                                      0
+                                  ? Provider.of<DB2Table>(context, listen: true)
+                                      .currentTable
+                                      .issueTrackerList[0]
+                                      .issue
+                                  : '',
+                          statusText:
+                              Provider.of<DB2Table>(context, listen: true)
+                                          .currentTable
+                                          .issueTrackerList
+                                          .length !=
+                                      0
+                                  ? Provider.of<DB2Table>(context, listen: true)
+                                      .currentTable
+                                      .issueTrackerList[0]
+                                      .status
+                                  : '',
+                        ),
                         /*RowCell(),
                         RowCell(),
                         RowCell(),*/
@@ -236,9 +280,10 @@ class _TrackerSheetState extends State<TrackerSheet> {
                                         .nProjectTitle = value;
                                   },
                                   initialText: Provider.of<DB2Table>(context,
-                                          listen: false)
-                                      .currentTable
-                                      .nProjectTitle,
+                                              listen: true)
+                                          .currentTable
+                                          .nProjectTitle ??
+                                      '',
                                 ),
                               ),
                               //Cell(txt: '', ),
@@ -268,9 +313,10 @@ class _TrackerSheetState extends State<TrackerSheet> {
                                           .nProjectUpdate = value;
                                     },
                                     initialText: Provider.of<DB2Table>(context,
-                                            listen: false)
-                                        .currentTable
-                                        .nProjectUpdate,
+                                                listen: true)
+                                            .currentTable
+                                            .nProjectUpdate ??
+                                        '',
                                   )),
                             ), //Cell(txt: '', ),
                           ],

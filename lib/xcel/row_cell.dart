@@ -3,11 +3,29 @@ import 'package:daily_tracker/project/project_tracker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class RowCell extends StatelessWidget {
+class RowCell extends StatefulWidget {
+  final snoText;
+  final issueText;
+  final statusText;
+  RowCell({this.snoText, this.issueText, this.statusText});
+
+  @override
+  _RowCellState createState() => _RowCellState();
+}
+
+class _RowCellState extends State<RowCell> {
   @override
   Widget build(BuildContext context) {
     int index =
         Provider.of<ProjectTracker>(context, listen: false).currentIndex;
+
+    TextEditingController snoController = TextEditingController();
+    TextEditingController issueController = TextEditingController();
+    TextEditingController statusController = TextEditingController();
+
+    snoController.text = widget.snoText;
+    issueController.text = widget.issueText;
+    statusController.text = widget.statusText;
 
     if (index <=
         Provider.of<ProjectTracker>(context, listen: false)
@@ -34,6 +52,7 @@ class RowCell extends StatelessWidget {
                       .issueTrackerList[index]
                       .sno = int.parse(value);
                 },
+                controller: snoController,
               )),
         ),
         Expanded(
@@ -50,6 +69,7 @@ class RowCell extends StatelessWidget {
                       .issueTrackerList[index]
                       .issue = value;
                 },
+                controller: issueController,
               )),
         ),
         Expanded(
@@ -66,6 +86,7 @@ class RowCell extends StatelessWidget {
                         .issueTrackerList[index]
                         .status = value;
                   },
+                  controller: statusController,
                 )))
       ],
     );
