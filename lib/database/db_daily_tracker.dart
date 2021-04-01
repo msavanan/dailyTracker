@@ -42,7 +42,7 @@ class DailyTrackerDatabase {
       ''');
 
     db.execute('''
-    CREATE TABLE ${tableName["issue"]}(date TEXT PRIMARY KEY, slno INTEGER, issue TEXT, status TEXT)      
+    CREATE TABLE ${tableName["issue"]}(columnId integer primary key autoincrement, date TEXT, slno INTEGER, issue TEXT, status TEXT)      
       ''');
 
     db.execute('''
@@ -69,10 +69,15 @@ class DailyTrackerDatabase {
       return update(table, row);
     }
     */
-    bool search = await searchQuery(table, row['date']);
-    if (search) {
-      return await update(table, row);
+    print('from db_daily_tracker line number 72');
+    print(row);
+    if (table != 'issue') {
+      bool search = await searchQuery(table, row['date']);
+      if (search) {
+        return await update(table, row);
+      }
     }
+
     return await db.insert(table, row);
   }
 
@@ -81,7 +86,6 @@ class DailyTrackerDatabase {
     return await db.query(table);
   }
 
-  //Todo delete
   Future<List<Map<String, dynamic>>> selectByDate(
       String table, String date) async {
     Database db = await instance.database;
@@ -97,7 +101,6 @@ class DailyTrackerDatabase {
   Future<bool> searchQuery(
     String table,
     String date,
-    /*Map<String, dynamic> row*/
   ) async {
     Database db = await instance.database;
     //String date = row['date'];

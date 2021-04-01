@@ -49,7 +49,7 @@ class _RowCellState extends State<RowCell> {
                 onChanged: (value) {
                   Provider.of<ProjectTracker>(context, listen: false)
                       .issueTrackerList[index]
-                      .sno = int.parse(value);
+                      .sno = value;
                 },
                 controller: snoController,
               )),

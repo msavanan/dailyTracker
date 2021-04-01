@@ -52,6 +52,8 @@ class _TrackerSheetState extends State<TrackerSheet> {
   bool update = false;
   bool project = false;
 
+  List<Widget> childWidgets = [];
+
   @override
   void initState() {
     super.initState();
@@ -66,6 +68,69 @@ class _TrackerSheetState extends State<TrackerSheet> {
   @override
   Widget build(BuildContext context) {
     //createXL();
+
+    /*RowCell(
+        snoText: Provider.of<DB2Table>(context, listen: true)
+                    .currentTable
+                    .issueTrackerList
+                    .length !=
+                0
+            ? Provider.of<DB2Table>(context, listen: true)
+                .currentTable
+                .issueTrackerList[0]
+                .sno
+                .toString()
+            : '',
+        issueText: Provider.of<DB2Table>(context, listen: true)
+                    .currentTable
+                    .issueTrackerList
+                    .length !=
+                0
+            ? Provider.of<DB2Table>(context, listen: true)
+                .currentTable
+                .issueTrackerList[0]
+                .issue
+            : '',
+        statusText: Provider.of<DB2Table>(context, listen: true)
+                    .currentTable
+                    .issueTrackerList
+                    .length !=
+                0
+            ? Provider.of<DB2Table>(context, listen: true)
+                .currentTable
+                .issueTrackerList[0]
+                .status
+            : '',
+      ),*/
+
+    int length =
+        Provider.of<DB2Table>(context, listen: true).currentTable.currentIndex;
+
+    if (childWidgets.length == 0 && length == 0) {
+      childWidgets.add(RowCell(
+        snoText: '',
+        issueText: '',
+        statusText: '',
+      ));
+    } else if (length > 0) {
+      childWidgets = [];
+      for (int i = 0; i <= length; i++) {
+        childWidgets.add(RowCell(
+          snoText: Provider.of<DB2Table>(context, listen: false)
+              .currentTable
+              .issueTrackerList[i]
+              .sno,
+          issueText: Provider.of<DB2Table>(context, listen: false)
+              .currentTable
+              .issueTrackerList[i]
+              .issue,
+          statusText: Provider.of<DB2Table>(context, listen: false)
+              .currentTable
+              .issueTrackerList[i]
+              .status,
+        ));
+      }
+    }
 
     return Consumer<GestureState>(
       builder: (context, gestureState, child) => GestureDetector(
@@ -190,23 +255,69 @@ class _TrackerSheetState extends State<TrackerSheet> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
                                   children: [
-                                    /*GestureDetector(
-                                      child: Icon(Icons.add),
+                                    GestureDetector(
+                                      child: Container(
+                                          height: 50,
+                                          width: 40,
+                                          decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: Colors.black)),
+                                          child: Icon(Icons.add)),
                                       onTap: () {
                                         print('Add row');
+
+                                        int currentIndex =
+                                            Provider.of<ProjectTracker>(context,
+                                                    listen: false)
+                                                .currentIndex;
+                                        Provider.of<ProjectTracker>(context,
+                                                listen: false)
+                                            .currentIndex = currentIndex + 1;
+                                        setState(() {
+                                          childWidgets.add(RowCell(
+                                            snoText: '',
+                                            issueText: '',
+                                            statusText: '',
+                                          ));
+                                        });
                                       },
-                                    ),*/
+                                    ),
                                     Expanded(
                                       child: Cell(
                                         txt: 'Issue',
                                       ),
                                     ),
-                                    /*GestureDetector(
-                                      child: Icon(Icons.remove),
-                                      onTap: () {
-                                        print('Delete row');
-                                      },
-                                    ),*/
+                                    Container(
+                                      height: 50,
+                                      width: 40,
+                                      decoration: BoxDecoration(
+                                          border:
+                                              Border.all(color: Colors.black)),
+                                      child: GestureDetector(
+                                        child: Icon(Icons.remove),
+                                        onTap: () {
+                                          print('Delete row');
+                                          int currentIndex =
+                                              Provider.of<ProjectTracker>(
+                                                      context,
+                                                      listen: false)
+                                                  .currentIndex;
+                                          if (currentIndex != 0) {
+                                            Provider.of<ProjectTracker>(context,
+                                                        listen: false)
+                                                    .currentIndex =
+                                                currentIndex - 1;
+                                          }
+
+                                          setState(() {
+                                            int index = childWidgets.length - 1;
+                                            childWidgets.removeAt(index);
+                                            print('From main at line 271');
+                                            print(childWidgets.length);
+                                          });
+                                        },
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),
@@ -218,7 +329,10 @@ class _TrackerSheetState extends State<TrackerSheet> {
                             )
                           ],
                         ),
-                        RowCell(
+                        Column(
+                          children: childWidgets,
+                        ),
+                        /*RowCell(
                           snoText: Provider.of<DB2Table>(context, listen: true)
                                       .currentTable
                                       .issueTrackerList
@@ -252,10 +366,7 @@ class _TrackerSheetState extends State<TrackerSheet> {
                                       .issueTrackerList[0]
                                       .status
                                   : '',
-                        ),
-                        /*RowCell(),
-                        RowCell(),
-                        RowCell(),*/
+                        ), */
                         Cell(txt: 'Project For Next Working Day'),
                         Row(
                           children: [

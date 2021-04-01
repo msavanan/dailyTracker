@@ -14,7 +14,7 @@ class ProjectTracker extends ChangeNotifier {
 }
 
 class IssueTracker {
-  int sno;
+  String sno;
   String issue;
   String status;
 }

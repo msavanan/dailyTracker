@@ -2,7 +2,6 @@ import 'package:daily_tracker/project/project_tracker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
 import 'db_daily_tracker.dart';
 
@@ -33,7 +32,8 @@ class DB2Table extends ChangeNotifier {
 
     currentTable.issueTrackerList.add(IssueTracker());
 
-    currentTable.issueTrackerList[0].sno = 1;
+    currentTable.currentIndex = 0;
+    currentTable.issueTrackerList[0].sno = '';
     currentTable.issueTrackerList[0].issue = '';
     currentTable.issueTrackerList[0].status = '';
     notifyListeners();
@@ -53,10 +53,8 @@ class DB2Table extends ChangeNotifier {
 
     currentTable.date = tb[0]['date'];
     currentTable.cProjectTitle = tb[0]['projectTitle'];
-    notifyListeners();
 
     currentTable.cProjectUpdate = tb[0]['projectUpdate'];
-    notifyListeners();
 
     currentTable.nProjectTitle = tb1[0]['projectTitle'];
     currentTable.nProjectUpdate = tb1[0]['projectUpdate'];
@@ -65,9 +63,12 @@ class DB2Table extends ChangeNotifier {
     print(currentTable.issueTrackerList.length);
 
     for (int i = 0; i < tb2.length; i++) {
+      /*print('From db2Table line number 66');
+      print(i); */
+      currentTable.currentIndex = i;
       currentTable.issueTrackerList.add(IssueTracker());
 
-      currentTable.issueTrackerList[i].sno = tb2[i]['slno'];
+      currentTable.issueTrackerList[i].sno = tb2[i]['slno'].toString();
       currentTable.issueTrackerList[i].issue = tb2[i]['issue'];
       currentTable.issueTrackerList[i].status = tb2[i]['status'];
     }

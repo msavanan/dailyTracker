@@ -23,8 +23,8 @@ class Table2db {
         Provider.of<ProjectTracker>(context, listen: false).currentIndex;
     /*print(currentTable.date);
     print(currentTable.cProjectTitle);
-    print(currentTable.cProjectUpdate);
-    print(currentTable.currentIndex); */
+    print(currentTable.cProjectUpdate);*/
+    print(currentTable.currentIndex);
     for (int i = 0; i <= currentTable.currentIndex; i++) {
       currentTable.issueTrackerList.add(IssueTracker());
       currentTable.issueTrackerList[i].sno =
@@ -42,6 +42,8 @@ class Table2db {
       /*print(currentTable.issueTrackerList[i].sno);
       print(currentTable.issueTrackerList[i].issue);
       print(currentTable.issueTrackerList[i].status); */
+      print("table2db line number 45");
+      print('$i');
       await DailyTrackerDatabase.instance.insert('issue', {
         "date": currentTable.date,
         "slno": currentTable.issueTrackerList[i].sno,
