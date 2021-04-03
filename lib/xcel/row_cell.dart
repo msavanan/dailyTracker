@@ -15,8 +15,8 @@ class RowCell extends StatefulWidget {
 class _RowCellState extends State<RowCell> {
   @override
   Widget build(BuildContext context) {
-    int index =
-        Provider.of<ProjectTracker>(context, listen: false).currentIndex;
+    ProjectTracker projectTracker = Provider.of<ProjectTracker>(context);
+    int index = projectTracker.activeRow;
 
     TextEditingController snoController = TextEditingController();
     TextEditingController issueController = TextEditingController();
@@ -25,18 +25,6 @@ class _RowCellState extends State<RowCell> {
     snoController.text = widget.snoText;
     issueController.text = widget.issueText;
     statusController.text = widget.statusText;
-
-    if (index <=
-        Provider.of<ProjectTracker>(context, listen: false)
-            .issueTrackerList
-            .length) {
-      Provider.of<ProjectTracker>(context, listen: false)
-          .issueTrackerList
-          .add(IssueTracker());
-    } else {
-      Provider.of<ProjectTracker>(context, listen: false)
-          .issueTrackerList[index] = IssueTracker();
-    }
 
     return Row(
       children: [
@@ -47,9 +35,7 @@ class _RowCellState extends State<RowCell> {
               child: TextField(
                 textAlign: TextAlign.center,
                 onChanged: (value) {
-                  Provider.of<ProjectTracker>(context, listen: false)
-                      .issueTrackerList[index]
-                      .sno = value;
+                  projectTracker.issueTrackerList[index].sno = value;
                 },
                 controller: snoController,
               )),
@@ -61,12 +47,7 @@ class _RowCellState extends State<RowCell> {
                   BoxDecoration(border: Border.all(color: Colors.black)),
               child: TextField(
                 onChanged: (value) {
-                  /*int index =
-                      Provider.of<ProjectTracker>(context, listen: false)
-                          .currentIndex;*/
-                  Provider.of<ProjectTracker>(context, listen: false)
-                      .issueTrackerList[index]
-                      .issue = value;
+                  projectTracker.issueTrackerList[index].issue = value;
                 },
                 controller: issueController,
               )),
@@ -78,12 +59,7 @@ class _RowCellState extends State<RowCell> {
                 child: TextField(
                   textAlign: TextAlign.center,
                   onChanged: (value) {
-                    /*int index =
-                        Provider.of<ProjectTracker>(context, listen: false)
-                            .currentIndex;*/
-                    Provider.of<ProjectTracker>(context, listen: false)
-                        .issueTrackerList[index]
-                        .status = value;
+                    projectTracker.issueTrackerList[index].status = value;
                   },
                   controller: statusController,
                 )))

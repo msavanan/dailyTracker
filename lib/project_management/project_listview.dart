@@ -1,4 +1,4 @@
-import 'package:daily_tracker/project/project_list.dart';
+import 'package:daily_tracker/project_management/project_list.dart';
 import 'package:daily_tracker/project/project_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

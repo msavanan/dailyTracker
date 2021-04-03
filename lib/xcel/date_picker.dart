@@ -60,13 +60,19 @@ class _DatePickerState extends State<DatePicker> {
       String date = '${DateFormat.yMMMd().format(_fromDate)}';
 
       Provider.of<ProjectTracker>(context, listen: false).date = date;
+
+      print("call from Date Picker");
+      print("Date;${Provider.of<ProjectTracker>(context, listen: false).date}");
+
       bool cond = await DailyTrackerDatabase.instance
           .searchQuery("currentProject", date);
+      print('Call from date picker line number: 65');
+      print(cond);
       if (cond) {
         await Provider.of<DB2Table>(context, listen: false)
             .checkCurrentDate(context, date);
       } else {
-        Provider.of<DB2Table>(context, listen: false).setTable(context);
+        Provider.of<ProjectTracker>(context, listen: false).setTable(context);
       }
     }
   }

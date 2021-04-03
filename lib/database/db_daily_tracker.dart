@@ -98,6 +98,15 @@ class DailyTrackerDatabase {
     return await db.update(table, row, where: 'date = ?', whereArgs: [date]);
   }
 
+  Future<int> removeRow(String table, String date, int slno) async {
+    Database db = await instance.database;
+    /*final row = await db
+        .query(table, where: '$date = ? $slno = ?', whereArgs: [date, slno]);
+    print(row); */
+    /*String slno = row[0]['slno']; */
+    return await db.delete(table, where: "slno = ?", whereArgs: [slno]);
+  }
+
   Future<bool> searchQuery(
     String table,
     String date,
@@ -105,6 +114,8 @@ class DailyTrackerDatabase {
     Database db = await instance.database;
     //String date = row['date'];
     List dateList = await db.query(table, where: 'date = ?', whereArgs: [date]);
+    print('inside SearchQuery DailyTrackerDatabase');
+    print(dateList);
     if (dateList.length > 0) {
       return true;
     } else {

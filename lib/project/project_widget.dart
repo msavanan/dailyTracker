@@ -1,5 +1,5 @@
 import 'package:daily_tracker/database/db_daily_tracker.dart';
-import 'package:daily_tracker/project/project_list.dart';
+import 'package:daily_tracker/project_management/project_list.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

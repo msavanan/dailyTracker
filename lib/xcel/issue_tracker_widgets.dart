@@ -1,4 +1,5 @@
 import 'package:daily_tracker/database/db2Table.dart';
+import 'package:daily_tracker/database/db_daily_tracker.dart';
 import 'package:daily_tracker/project/project_tracker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,36 +17,30 @@ class _IssueTrackerWidgetState extends State<IssueTrackerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    int length =
-        Provider.of<DB2Table>(context, listen: true).currentTable.currentIndex;
+    ProjectTracker projectTracker =
+        Provider.of<ProjectTracker>(context, listen: false);
 
-    if (childWidgets.length == 0 && length == 0) {
+    DB2Table db2table = Provider.of<DB2Table>(context, listen: false);
+
+    childWidgets = [];
+    int issueTrackerLength = Provider.of<ProjectTracker>(context, listen: true)
+        .issueTrackerList
+        .length;
+    //db2table.currentTable.issueTrackerList.length;  //
+
+    // print('Issue Tracker Length: $issueTrackerLength');
+
+    for (int i = 0; i < issueTrackerLength; i++) {
+      print(
+          'projectTracker.issueTrackerList[i].sno: ${projectTracker.issueTrackerList[i].sno}');
       childWidgets.add(RowCell(
-        snoText: '',
-        issueText: '',
-        statusText: '',
+        snoText: projectTracker.issueTrackerList[i].sno ?? '',
+        issueText: projectTracker.issueTrackerList[i].issue ?? '',
+        statusText: projectTracker.issueTrackerList[i].status ?? '',
       ));
-    } else if (length > 0) {
-      print("call from main line number 116");
-      print('${childWidgets.length}');
-      childWidgets = [];
-      for (int i = 0; i <= length; i++) {
-        childWidgets.add(RowCell(
-          snoText: Provider.of<DB2Table>(context, listen: false)
-              .currentTable
-              .issueTrackerList[i]
-              .sno,
-          issueText: Provider.of<DB2Table>(context, listen: false)
-              .currentTable
-              .issueTrackerList[i]
-              .issue,
-          statusText: Provider.of<DB2Table>(context, listen: false)
-              .currentTable
-              .issueTrackerList[i]
-              .status,
-        ));
-      }
+      projectTracker.issueTrackerList[i].id = i;
     }
+
     return Column(
       children: [
         Row(
@@ -70,19 +65,12 @@ class _IssueTrackerWidgetState extends State<IssueTrackerWidget> {
                           child: Icon(Icons.add)),
                       onTap: () {
                         print('Add row');
+                        projectTracker.addIssue();
 
-                        int currentIndex =
-                            Provider.of<ProjectTracker>(context, listen: false)
-                                .currentIndex;
-                        Provider.of<ProjectTracker>(context, listen: false)
-                            .currentIndex = currentIndex + 1;
-                        setState(() {
-                          childWidgets.add(RowCell(
-                            snoText: '',
-                            issueText: '',
-                            statusText: '',
-                          ));
-                        });
+                        print(
+                            "db2table issue: ${db2table.currentTable.issueTrackerList.length}");
+                        print(
+                            "projectTracker length:${projectTracker.issueTrackerList.length}");
                       },
                     ),
                     Expanded(
@@ -97,28 +85,13 @@ class _IssueTrackerWidgetState extends State<IssueTrackerWidget> {
                           border: Border.all(color: Colors.black)),
                       child: GestureDetector(
                         child: Icon(Icons.remove),
-                        onTap: () {
+                        onTap: () async {
                           print('Delete row');
-                          int currentIndex = Provider.of<ProjectTracker>(
-                                  context,
-                                  listen: false)
-                              .currentIndex;
-                          if (currentIndex != 0) {
-                            Provider.of<ProjectTracker>(context, listen: false)
-                                .currentIndex = currentIndex - 1;
+                          int index = projectTracker.currentIndex;
+                          print(index);
+                          if (index > 1) {
+                            projectTracker.removeIssue();
                           }
-
-                          setState(() {
-                            int index = childWidgets.length - 1;
-                            currentIndex = Provider.of<ProjectTracker>(context,
-                                    listen: false)
-                                .currentIndex;
-                            Provider.of<ProjectTracker>(context, listen: false)
-                                .currentIndex = currentIndex - 1;
-                            childWidgets.removeAt(index);
-                            print('From main at line 271');
-                            print(childWidgets.length);
-                          });
                         },
                       ),
                     ),
