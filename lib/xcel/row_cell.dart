@@ -6,7 +6,8 @@ class RowCell extends StatefulWidget {
   final snoText;
   final issueText;
   final statusText;
-  RowCell({this.snoText, this.issueText, this.statusText});
+  final id;
+  RowCell({this.snoText, this.issueText, this.statusText, this.id});
 
   @override
   _RowCellState createState() => _RowCellState();
@@ -37,6 +38,9 @@ class _RowCellState extends State<RowCell> {
                 onChanged: (value) {
                   projectTracker.issueTrackerList[index].sno = value;
                 },
+                onTap: () {
+                  projectTracker.setActiveRow(widget.id);
+                },
                 controller: snoController,
               )),
         ),
@@ -49,6 +53,9 @@ class _RowCellState extends State<RowCell> {
                 onChanged: (value) {
                   projectTracker.issueTrackerList[index].issue = value;
                 },
+                onTap: () {
+                  projectTracker.setActiveRow(widget.id);
+                },
                 controller: issueController,
               )),
         ),
@@ -60,6 +67,9 @@ class _RowCellState extends State<RowCell> {
                   textAlign: TextAlign.center,
                   onChanged: (value) {
                     projectTracker.issueTrackerList[index].status = value;
+                  },
+                  onTap: () {
+                    projectTracker.setActiveRow(widget.id);
                   },
                   controller: statusController,
                 )))

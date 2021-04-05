@@ -1,5 +1,4 @@
 import 'package:daily_tracker/database/db2Table.dart';
-import 'package:daily_tracker/database/db_daily_tracker.dart';
 import 'package:daily_tracker/project/project_tracker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,25 +19,18 @@ class _IssueTrackerWidgetState extends State<IssueTrackerWidget> {
     ProjectTracker projectTracker =
         Provider.of<ProjectTracker>(context, listen: false);
 
-    DB2Table db2table = Provider.of<DB2Table>(context, listen: false);
-
     childWidgets = [];
     int issueTrackerLength = Provider.of<ProjectTracker>(context, listen: true)
         .issueTrackerList
         .length;
-    //db2table.currentTable.issueTrackerList.length;  //
-
-    // print('Issue Tracker Length: $issueTrackerLength');
 
     for (int i = 0; i < issueTrackerLength; i++) {
-      print(
-          'projectTracker.issueTrackerList[i].sno: ${projectTracker.issueTrackerList[i].sno}');
       childWidgets.add(RowCell(
         snoText: projectTracker.issueTrackerList[i].sno ?? '',
         issueText: projectTracker.issueTrackerList[i].issue ?? '',
         statusText: projectTracker.issueTrackerList[i].status ?? '',
+        id: i,
       ));
-      projectTracker.issueTrackerList[i].id = i;
     }
 
     return Column(
@@ -64,13 +56,7 @@ class _IssueTrackerWidgetState extends State<IssueTrackerWidget> {
                               border: Border.all(color: Colors.black)),
                           child: Icon(Icons.add)),
                       onTap: () {
-                        print('Add row');
                         projectTracker.addIssue();
-
-                        print(
-                            "db2table issue: ${db2table.currentTable.issueTrackerList.length}");
-                        print(
-                            "projectTracker length:${projectTracker.issueTrackerList.length}");
                       },
                     ),
                     Expanded(
@@ -86,11 +72,10 @@ class _IssueTrackerWidgetState extends State<IssueTrackerWidget> {
                       child: GestureDetector(
                         child: Icon(Icons.remove),
                         onTap: () async {
-                          print('Delete row');
-                          int index = projectTracker.currentIndex;
-                          print(index);
+                          int index = projectTracker.issueTrackerLength;
                           if (index > 1) {
-                            projectTracker.removeIssue();
+                            projectTracker
+                                .removeIssue(projectTracker.activeRow);
                           }
                         },
                       ),

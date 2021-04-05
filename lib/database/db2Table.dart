@@ -48,7 +48,7 @@ class DB2Table extends ChangeNotifier {
     print(projectTracker.issueTrackerList.length);
 
     for (int i = 0; i < tb2.length; i++) {
-      projectTracker.currentIndex = i;
+      projectTracker.issueTrackerLength = i;
       projectTracker.issueTrackerList.add(IssueTracker());
 
       projectTracker.issueTrackerList[i].sno = tb2[i]['slno'].toString();

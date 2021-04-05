@@ -9,7 +9,7 @@ class Table2db {
         Provider.of<ProjectTracker>(context, listen: false);
     print("call from Table2DB");
     print("${projectTracker.date}");
-    for (int i = 0; i < projectTracker.currentIndex; i++) {
+    for (int i = 0; i < projectTracker.issueTrackerLength; i++) {
       print("table2db line number 13");
       print('$i');
       await DailyTrackerDatabase.instance.insert('issue', {

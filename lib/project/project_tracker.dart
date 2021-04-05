@@ -12,19 +12,35 @@ class ProjectTracker extends ChangeNotifier {
 
   int activeRow = 0;
 
-  int currentIndex = 0;
+  int issueTrackerLength = 0;
 
   List<IssueTracker> issueTrackerList = [];
 
-  addIssue() {
-    issueTrackerList.add(IssueTracker(sno: '', issue: '', status: '', id: 0));
-    currentIndex++;
+  setActiveRow(int index) {
+    print('Call from project Tracker line number 20 : $index');
+    this.activeRow = index;
     notifyListeners();
   }
 
-  removeIssue() {
-    issueTrackerList.removeLast();
-    currentIndex--;
+  addIssue() {
+    //Todo add a new rowcell in between cells
+    // Todo SlNo should be updated when a rowcell gets deleted
+    // Todo when rows added or deleted the created cell or the cell before the deleted cell should be active
+    // Todo sqlite database should get updated if the data is getting changed from database addIssue/removeIssue
+
+    issueTrackerList.add(IssueTracker(sno: '', issue: '', status: ''));
+    issueTrackerLength++;
+    /*this.activeRow = issueTrackerLength;
+    print('call from project tracker - activeRow : ${this.activeRow}');*/
+    notifyListeners();
+  }
+
+  removeIssue(int index) {
+    print('call from Project Tracker - Remove Issue : $index');
+    issueTrackerList.removeAt(index);
+    this.issueTrackerLength = issueTrackerList.length;
+    this.activeRow = issueTrackerLength - 1;
+    print('call from project tracker ${this.issueTrackerList}');
     notifyListeners();
   }
 
@@ -36,7 +52,7 @@ class ProjectTracker extends ChangeNotifier {
     this.nProjectTitle = '';
     this.nProjectUpdate = '';
 
-    this.currentIndex = 0;
+    this.issueTrackerLength = 0;
 
     this.issueTrackerList = [];
     this.addIssue();
@@ -45,13 +61,13 @@ class ProjectTracker extends ChangeNotifier {
   }
 
   updateTable(BuildContext context, date) async {
-    print('Call from ProjectTracker - updateTable function - line number 40');
+    print('Call from ProjectTracker - updateTable function ');
     var tb = await DailyTrackerDatabase.instance
         .selectByDate('currentProject', date);
     var tb1 =
         await DailyTrackerDatabase.instance.selectByDate('projection', date);
     var tb2 = await DailyTrackerDatabase.instance.selectByDate('issue', date);
-    print('ProjectTracker line 64');
+    print('call from ProjectTracker $tb, $tb1, $tb2');
     print('$tb');
     print('$tb1');
     print('$tb2');
@@ -64,29 +80,31 @@ class ProjectTracker extends ChangeNotifier {
     this.nProjectTitle = tb1[0]['projectTitle'];
     this.nProjectUpdate = tb1[0]['projectUpdate'];
 
-    print('Call from ProjectTracker line number 81');
-    print(this.issueTrackerList.length);
+    print(
+        'Call from ProjectTracker this.issueTrackerList.length : ${this.issueTrackerList.length}');
 
     this.issueTrackerList = [];
 
     for (int i = 0; i < tb2.length; i++) {
-      this.currentIndex = i;
+      this.issueTrackerLength = i;
       this.issueTrackerList.add(IssueTracker());
 
       this.issueTrackerList[i].sno = tb2[i]['slno'].toString();
       this.issueTrackerList[i].issue = tb2[i]['issue'];
       this.issueTrackerList[i].status = tb2[i]['status'];
-      this.issueTrackerList[i].id = i;
     }
+    this.activeRow = 0;
     notifyListeners();
   }
 }
 
 class IssueTracker {
-  IssueTracker(
-      {String sno = '', String issue = '', String status = '', int id = 0});
+  IssueTracker({
+    String sno = '',
+    String issue = '',
+    String status = '',
+  });
   String sno;
   String issue;
   String status;
-  int id;
 }
